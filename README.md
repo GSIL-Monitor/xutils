@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dzoverflow/xutils.svg?branch=master-github)](https://travis-ci.org/dzoverflow/xutils) [![codecov](https://codecov.io/gh/dzoverflow/xutils/branch/master-github/graph/badge.svg)](https://codecov.io/gh/dzoverflow/xutils)
+[![Build Status](https://travis-ci.org/dzoverflow/xutils.svg?branch=master)](https://travis-ci.org/dzoverflow/xutils) [![codecov](https://codecov.io/gh/dzoverflow/xutils/branch/master/graph/badge.svg)](https://codecov.io/gh/dzoverflow/xutils)
 
 [中文版](https://github.com/dzoverflow/xutils/blob/master/zh_cn_README.md)
 
