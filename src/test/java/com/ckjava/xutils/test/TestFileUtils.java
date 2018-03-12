@@ -108,7 +108,7 @@ public class TestFileUtils extends FileUtils {
 		//String path = "D:/git-workspace/db_backup";
 		//String path = "D:/php-workspace";
 		//String path = "D:/svn-workspace";
-		String path = "D:\\git-workspace\\jee-utils";
+		String path = "D:\\git-workspace\\xutils";
 		String desDir = "D:/BaiduYunDownload/encode-files";
 		backupDir(path, desDir, excludePath, excludeFile);
 	}

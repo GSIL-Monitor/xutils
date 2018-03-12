@@ -3,6 +3,8 @@ package com.ckjava.xutils.test;
 import org.junit.Test;
 
 import com.ckjava.xutils.CommandUtils;
+import com.ckjava.xutils.Constants;
+import com.ckjava.xutils.OSUtils;
 
 public class TestCommandUtils {
 
@@ -13,7 +15,15 @@ public class TestCommandUtils {
 		Thread task = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				CommandUtils.execTask("ping www.baidu.com", null, null, "GBK", output);
+				String os = OSUtils.getCurrentOSType();
+				String cmd = "cmd /c mvn -version";
+				String charset = Constants.CHARSET.GBK;
+				if (os.equals(Constants.OSTYPE.LINUX)) {
+					cmd = "/bin/bash mvn -version";
+					charset = Constants.CHARSET.UTF8;
+				}
+				
+				CommandUtils.execTask(cmd, null, null, charset, output);
 			}
 		});
 		task.start();

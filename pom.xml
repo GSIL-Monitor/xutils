@@ -228,7 +228,7 @@
 	<licenses>
 		<license>
 			<name>MIT License</name>
-			<url>https://github.com/dzoverflow/xutils/LICENSE</url>
+			<url>https://github.com/dzoverflow/xutils/blob/master/LICENSE</url>
 			<distribution>xutils</distribution>
 		</license>
 	</licenses>

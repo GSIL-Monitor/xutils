@@ -143,7 +143,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		String originalBody = null;
 		try {
 			originalBody = IOUtils
-					.getString(new FileInputStream("D:/git-workspace/jee-utils/src/test/resources/body.txt"));
+					.getString(new FileInputStream("D:/git-workspace/xutils/src/test/resources/body.txt"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
