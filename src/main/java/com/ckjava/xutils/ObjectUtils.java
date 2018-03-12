@@ -262,17 +262,11 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils implements
 			
 			for (Method method : methods) {
 				String methodName = method.getName();
-				Object methodReturnValue = null;
-				try {
-					methodReturnValue = method.invoke(t, emptyObj);
-				} catch (Exception e) {
-					logger.error("CollectionUtils mPull has error", e);
-				}
 				if (methodName.equals(mKey)) {
-					key = StringUtils.getStr(methodReturnValue);
+					key = StringUtils.getStr(invokeMethod(t, emptyObj, method));
 				}
 				if (methodName.equals(mValue)) {
-					value = StringUtils.getStr(methodReturnValue);
+					value = StringUtils.getStr(invokeMethod(t, emptyObj, method));
 				}
 			}
 			
@@ -283,4 +277,13 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils implements
 		return resultMap;
 	}
 
+	private static <T> Object invokeMethod(T t, Object[] emptyObj, Method method) {
+		try {
+			return method.invoke(t, emptyObj);
+		} catch (Exception e) {
+			logger.error("CollectionUtils invokeMethod has error", e);
+			return null;
+		}
+	}
+	
 }
