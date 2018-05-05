@@ -57,7 +57,8 @@ public interface Constants {
 		public static final String ON = "on";
 		public static final String OFF = "off";
 		public static final String YES = "yes";
-		public static final String NO = "no";
+		public static final String SUCCESS = "success";
+		public static final String FAIL = "fail";
 	}
 	
 	public class HTTPMETHOD {
