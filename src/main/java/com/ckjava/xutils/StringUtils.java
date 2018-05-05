@@ -149,7 +149,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils implements
 	 * 
 	 * @return 替换后的字符串
 	 */
-	protected String replaceVariable(String sourceString, Map<String, String> placeholderMap) {
+	public static String replaceVariable(String sourceString, Map<String, String> placeholderMap) {
 		if (StringUtils.isNotBlank(sourceString) && sourceString.contains("${") && sourceString.contains("}")) {
 			Pattern pattern = Pattern.compile(REG.VARIABLE);
 			Matcher matcher = pattern.matcher(sourceString);
