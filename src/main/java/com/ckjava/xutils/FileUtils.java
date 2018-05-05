@@ -1,5 +1,6 @@
 package com.ckjava.xutils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -463,6 +465,47 @@ public class FileUtils extends org.apache.commons.io.FileUtils implements Consta
 			}
 		} else {
 			throw new RuntimeException("file not exits");
+		}
+	}
+	
+	/**
+	 * 解压zip压缩文件到指定目录
+	 * 
+	 * @param zipFile zip原始文件
+	 * @param dirPath 解压到哪个目录
+	 * @return boolean true:解压成功， false:失败
+	 */
+	public static boolean unzipFile(File zipFile, File dirPath) {
+		if (!dirPath.exists()) {
+			throw new RuntimeException(dirPath.getAbsolutePath() + " 不存在");
+		}
+		if (!dirPath.isDirectory()) {
+			throw new RuntimeException(dirPath.getAbsolutePath() + " 不是目录");
+		}
+		if (zipFile.exists()) {
+			try {
+				ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)));
+
+	            BufferedOutputStream bos = null;
+	            ZipEntry entry = null;
+	            int b = 0;
+	            while ((entry=zis.getNextEntry()) != null) {
+	            	String entryName = entry.getName();
+	                bos = new BufferedOutputStream(new FileOutputStream(dirPath.getAbsolutePath() + File.separator + entryName));
+	                while ((b = zis.read()) != -1) {
+	                	bos.write(b);
+	                }
+	                bos.flush();
+	                bos.close();
+	            }
+	            zis.close();
+	            return true;
+			} catch (IOException e) {
+				logger.error("FileUtils upZipFile 出现异常", e);
+				return false;
+			}
+		} else {
+			throw new RuntimeException(zipFile.getAbsolutePath() + "zip 文件不存在");
 		}
 	}
 

@@ -16,13 +16,20 @@ import java.io.InputStream;
 import java.util.Date;
 
 import org.apache.commons.codec.binary.Base64;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.ckjava.xutils.FileUtils;
+import com.ckjava.xutils.IOUtils;
 
 public class TestFileUtils extends FileUtils {
 	
-	String path = TestFileUtils.class.getResource("/").getPath();
+	String path = null;
+	
+	@Before
+	public void init() {
+		path = TestFileUtils.class.getResource("/").getPath();
+	}
 	
 	@Test
 	public void joinPath() {
@@ -99,7 +106,49 @@ public class TestFileUtils extends FileUtils {
 	}
 	
 	@Test
-	public void zipFiles() {
+	public void zipFile() throws IOException {
+		File tempFile = new File(joinPath(path,"/tempFile.txt"));
+		tempFile.createNewFile();
+		
+		write(tempFile, "测试\r\ntest", CHARSET.UTF8);
+		
+		File zipFile = zipFile(tempFile);
+		assertTrue(zipFile.exists());
+		
+		tempFile.delete();
+		zipFile.delete();
+	}
+	
+	@Test
+	public void unzipFiles() throws IOException {
+		// 创建测试目录
+		File tempUnzipDir = new File(joinPath(path,"/tempUnzipDir"));
+		tempUnzipDir.mkdirs();
+		
+		// 创建压缩文件
+		File tempFile = new File(joinPath(path,"/tempFile.txt"));
+		tempFile.createNewFile();
+		
+		write(tempFile, "测试\r\ntest", CHARSET.UTF8);
+		
+		File zipFile = zipFile(tempFile);
+		assertTrue(zipFile.exists());
+		
+		// 解压文件
+		assertTrue(unzipFile(zipFile, tempUnzipDir));
+		
+		// 判断解压后的文件是否一致
+		File unzipFile = new File(joinPath(path,"/tempUnzipDir", "tempFile.txt"));
+		assertTrue(unzipFile.exists());
+		
+		String data = IOUtils.getString(new FileInputStream(unzipFile));
+		assertTrue(data.equals("测试\r\ntest"));
+		
+		// 删除文件
+		unzipFile.delete();
+		tempUnzipDir.delete();
+		zipFile.delete();
+		tempFile.delete();
 	}
 	
 	public static void main(String[] args) {
@@ -111,6 +160,9 @@ public class TestFileUtils extends FileUtils {
 		String path = "D:\\git-workspace\\xutils";
 		String desDir = "D:/BaiduYunDownload/encode-files";
 		backupDir(path, desDir, excludePath, excludeFile);
+	}
+	
+	public static void unpackFile(File filePath, File dirPath) {
 	}
 	
 	public static void backupDir(String path, String desDir, String[] excludePath, String[] excludeFile) {
@@ -148,7 +200,7 @@ public class TestFileUtils extends FileUtils {
 		}
 		
 	}
-
+	
 	public static void deCodeFile() {
 		String data = "D:\\BaiduYunDownload\\dagger.txt";
 		
