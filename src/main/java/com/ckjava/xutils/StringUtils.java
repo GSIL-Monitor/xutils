@@ -134,6 +134,34 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils implements
 		}
 		return false;
 	}
+	
+	/**
+	 * 
+	 * 判断字符串是否在字符数组中, 忽略大小写
+	 * 
+	 * @param str
+	 *            字符串
+	 * @param strs
+	 *            字符数组
+	 * @return true:在，false:不在
+	 */
+	public static boolean containsStrIgnoreCase(String str, String[] strs) {
+		if (str == null && strs == null) {
+			return true;
+		}
+		if (str == null && strs != null) {
+			return false;
+		}
+		if (str != null && strs == null) {
+			return false;
+		}
+		for (String string : strs) {
+			if (str.toUpperCase().contains(string.toUpperCase())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * 将指定字符串中的占位符变量替换成具体的值

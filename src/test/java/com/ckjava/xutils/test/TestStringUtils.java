@@ -61,6 +61,17 @@ public class TestStringUtils extends StringUtils {
 	}
 	
 	@Test
+	public void containsStrIgnoreCase() {
+		String str = "a";
+		String[] strs = {"A", "b"};
+		assertTrue(containsStrIgnoreCase(str, strs));
+		assertTrue(containsStrIgnoreCase(null, null));
+		assertFalse(containsStrIgnoreCase(null, strs));
+		assertFalse(containsStrIgnoreCase(str, null));
+		assertFalse(containsStrIgnoreCase("c", strs));
+	}
+	
+	@Test
 	public void objectHasStr() {
 		String str = "abc";
 		assertTrue(objectHasStr(str, "a"));
