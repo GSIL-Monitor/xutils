@@ -477,10 +477,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils implements Consta
 	 */
 	public static boolean unzipFile(File zipFile, File dirPath) {
 		if (!dirPath.exists()) {
-			throw new RuntimeException(dirPath.getAbsolutePath() + " 不存在");
-		}
-		if (!dirPath.isDirectory()) {
-			throw new RuntimeException(dirPath.getAbsolutePath() + " 不是目录");
+			createDirectory(dirPath.getAbsolutePath());
 		}
 		if (zipFile.exists()) {
 			try {
@@ -491,7 +488,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils implements Consta
 	            int b = 0;
 	            while ((entry=zis.getNextEntry()) != null) {
 	            	String entryName = entry.getName();
-	                bos = new BufferedOutputStream(new FileOutputStream(dirPath.getAbsolutePath() + File.separator + entryName));
+	            	File unzipFile = new File(dirPath.getAbsolutePath() + File.separator + entryName);
+	            	createFile(dirPath.getAbsolutePath() + File.separator + entryName);
+	            	
+	                bos = new BufferedOutputStream(new FileOutputStream(unzipFile));
 	                while ((b = zis.read()) != -1) {
 	                	bos.write(b);
 	                }

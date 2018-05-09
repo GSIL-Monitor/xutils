@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ckjava.xutils.CollectionUtils;
-import com.google.common.collect.Maps;
 
 public class TestCollectionUtils extends CollectionUtils {
 	

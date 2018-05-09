@@ -159,10 +159,38 @@ public class TestFileUtils extends FileUtils {
 		//String path = "D:/svn-workspace";
 		String path = "D:\\git-workspace\\xutils";
 		String desDir = "D:/BaiduYunDownload/encode-files";
-		backupDir(path, desDir, excludePath, excludeFile);
+		//backupDir(path, desDir, excludePath, excludeFile);
+		
+		String originalFileName = "stockPrediction_zip_encode_1525344557381.zip";
+		String encodeFileName = "stockPrediction_zip_encode_1525344557381";
+		String zipFileName = "stockPrediction.zip";
+		String projectFileName = "stockPrediction";
+		
+		String zipFile = "D:\\BaiduYunDownload\\"+originalFileName;
+		String unzipPath = "D:\\BaiduYunDownload\\";
+		
+		unpackFile(new File(zipFile), new File(unzipPath), encodeFileName, zipFileName, projectFileName);
 	}
 	
-	public static void unpackFile(File filePath, File dirPath) {
+	public static void unpackFile(File zipfile, File dirPath, String encodefileName, String zipFileName, String projectFileName) {
+		boolean flag = unzipFile(zipfile, dirPath);
+		if (flag) {
+			System.out.println("解压原始文件成功");
+			
+			File destZipFile = new File(dirPath.getAbsolutePath()+File.separator+zipFileName);
+			deCodeFile(new File(dirPath.getAbsolutePath()+File.separator+encodefileName), destZipFile);
+			System.out.println("deCodeFile done");
+			
+			flag = unzipFile(destZipFile, new File(dirPath.getAbsolutePath()+File.separator+projectFileName));
+			if (flag) {
+				System.out.println("解压项目文件成功");
+			} else {
+				System.out.println("解压项目文件成功");
+			}
+		} else {
+			System.err.println("解压原始文件失败");
+		}
+		
 	}
 	
 	public static void backupDir(String path, String desDir, String[] excludePath, String[] excludeFile) {
@@ -218,6 +246,22 @@ public class TestFileUtils extends FileUtils {
 			e.printStackTrace();
 		}
 		System.out.println("done");
+	}
+	
+	public static void deCodeFile(File sourceFile, File destFile) {
+		String temp = "";
+		try {
+			BufferedReader is = new BufferedReader(new FileReader(sourceFile));
+			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(destFile));
+			while ((temp = is.readLine()) != null) {
+				byte[] str = Base64.decodeBase64(temp.getBytes());
+				os.write(str);
+			}
+			is.close();
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
