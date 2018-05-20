@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.ckjava.xutils.AESUtils;
+import com.ckjava.xutils.EncodesUtils;
 
 public class TestAESUtils extends AESUtils {
 	
@@ -16,14 +17,14 @@ public class TestAESUtils extends AESUtils {
 	@Test
 	public void testByte2HexString() throws Exception {
 		byte[] data = "您好, hello".getBytes(CHARSET.UTF8);
-		String hexString = byte2HexString(data);
+		String hexString = EncodesUtils.byte2HexString(data);
 		System.out.println("hexString="+hexString);
 		assertTrue(hexString.equals(hexString));
 	}
 	
 	@Test
 	public void testHexString2Byte() throws Exception {
-		byte[] data = hexString2Byte(hexString);
+		byte[] data = EncodesUtils.hexString2Byte(hexString);
 		String string = new String(data, CHARSET.UTF8);
 		System.out.println("string="+string);
 		assertTrue(string.equals(dataString));

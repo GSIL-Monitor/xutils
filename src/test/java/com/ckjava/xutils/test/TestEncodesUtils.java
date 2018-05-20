@@ -93,4 +93,16 @@ public class TestEncodesUtils extends EncodesUtils implements Constants {
 		}
 	}
 	
+	@Test
+	public void bytesToHexString() throws UnsupportedEncodingException {
+		String hexString = byte2HexString(str.getBytes(CHARSET.UTF8));
+		assertTrue(hexString.equals(hexStr));
+	}
+	
+	@Test
+	public void hexStringToBytes() throws UnsupportedEncodingException {
+		byte[] bytes = hexString2Byte(hexStr);
+		assertTrue(str.equals(new String(bytes, CHARSET.UTF8)));
+	}
+	
 }

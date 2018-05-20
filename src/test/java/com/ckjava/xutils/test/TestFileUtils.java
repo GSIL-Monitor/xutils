@@ -161,13 +161,13 @@ public class TestFileUtils extends FileUtils {
 		String desDir = "D:/BaiduYunDownload/encode-files";
 		//backupDir(path, desDir, excludePath, excludeFile);
 		
-		String originalFileName = "stockPrediction_zip_encode_1525344557381.zip";
-		String encodeFileName = "stockPrediction_zip_encode_1525344557381";
-		String zipFileName = "stockPrediction.zip";
-		String projectFileName = "stockPrediction";
+		String originalFileName = "blurAdmin_zip_encode_1525865019863.zip";
+		String encodeFileName = "blurAdmin_zip_encode_1525865019863";
+		String zipFileName = "blurAdmin.zip";
+		String projectFileName = "blurAdmin";
 		
-		String zipFile = "D:\\BaiduYunDownload\\"+originalFileName;
-		String unzipPath = "D:\\BaiduYunDownload\\";
+		String zipFile = "D:\\workspace\\angularJS\\"+originalFileName;
+		String unzipPath = "D:\\workspace\\angularJS\\";
 		
 		unpackFile(new File(zipFile), new File(unzipPath), encodeFileName, zipFileName, projectFileName);
 	}
