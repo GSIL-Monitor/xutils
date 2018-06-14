@@ -10,11 +10,11 @@ available at [Maven Central Repository](https://mvnrepository.com/artifact/com.c
 <dependency>
     <groupId>com.ckjava</groupId>
     <artifactId>xutils</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
-lasted version is `1.0.0`
+lasted version is `1.0.2`
 
 ## Method list
 
