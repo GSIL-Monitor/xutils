@@ -1,5 +1,6 @@
 package com.ckjava.xutils.test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
@@ -16,6 +17,17 @@ import org.junit.Test;
 import com.ckjava.xutils.ObjectUtils;
 
 public class TestObjectUtils extends ObjectUtils {
+
+	@Test
+	public void isNotEmptyObject() {
+		User user = new User();
+		assertFalse(isNotEmptyObject(user));
+		assertTrue(isEmptyObject(user));
+		user.setName("ck");
+		user.setAge(1);
+		assertFalse(isEmptyObject(user));
+		assertTrue(isNotEmptyObject(user));
+	}
 	
 	@Test
 	public void fillMapWithString() {
@@ -131,17 +143,17 @@ public class TestObjectUtils extends ObjectUtils {
 	public class User implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String name;
-		private int age;
+		private Integer age;
 		public String getName() {
 			return name;
 		}
 		public void setName(String name) {
 			this.name = name;
 		}
-		public int getAge() {
+		public Integer getAge() {
 			return age;
 		}
-		public void setAge(int age) {
+		public void setAge(Integer age) {
 			this.age = age;
 		}
 		public User(String name, int age) {

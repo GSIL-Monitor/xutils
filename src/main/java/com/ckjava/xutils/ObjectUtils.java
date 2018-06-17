@@ -34,14 +34,15 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils implements
 			try {
 				boolean flag = field.isAccessible();
 				boolean isStatic = Modifier.toString(field.getModifiers()).contains("static");
-				if (isStatic) {
+				if (isStatic || field.getName().startsWith("this")) {
 					continue;
 				}
 				if (!flag) {
 					field.setAccessible(true);
 				}
+
 				Object fieldObj = field.get(obj);
-				if (fieldObj != null && !fieldObj.toString().equals("")) {
+				if (fieldObj != null && !fieldObj.toString().equals(StringUtils.EMPTY)) {
 					return false;
 				}
 			} catch (IllegalAccessException e) {
@@ -66,7 +67,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils implements
 			try {
 				boolean flag = field.isAccessible();
 				boolean isStatic = Modifier.toString(field.getModifiers()).contains("static");
-				if (isStatic) {
+				if (isStatic || field.getName().startsWith("this")) {
 					continue;
 				}
 				if (!flag) {
