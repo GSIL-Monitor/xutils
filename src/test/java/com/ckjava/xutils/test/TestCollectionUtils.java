@@ -1,23 +1,17 @@
 package com.ckjava.xutils.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.ckjava.xutils.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ckjava.xutils.CollectionUtils;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class TestCollectionUtils extends CollectionUtils {
 	
-	List<String> srcList = new ArrayList<String>();
-	Map<String, Boolean> dataMap = new HashMap<String, Boolean>();
+	List<String> srcList = new ArrayList<>();
+	Map<String, Boolean> dataMap = new HashMap<>();
 	
 	@Before
 	public void initTest() {
@@ -116,6 +110,73 @@ public class TestCollectionUtils extends CollectionUtils {
 		Assert.assertTrue(asMap(keys, null, map) == null);
 		Assert.assertTrue(asMap(null, values, map) == null);
 		Assert.assertTrue(asMap(keys, values, null) == null);
+	}
+
+	@Test
+	public void groupList() {
+		List<Map<String, Object>> targetList = new ArrayList<>();
+		Map<String, Object> data = new HashMap<>();
+		data.put("class", "一班");
+		data.put("name", "张三");
+		data.put("age", "20");
+		data.put("sex", "男");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "一班");
+		data.put("name", "李四");
+		data.put("age", "21");
+		data.put("sex", "女");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "一班");
+		data.put("name", "王五");
+		data.put("age", "23");
+		data.put("sex", "男");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "二班");
+		data.put("name", "张三");
+		data.put("age", "20");
+		data.put("sex", "男");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "二班");
+		data.put("name", "李四");
+		data.put("age", "21");
+		data.put("sex", "女");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "二班");
+		data.put("name", "王五");
+		data.put("age", "23");
+		data.put("sex", "男");
+		targetList.add(data);
+
+		data = new HashMap<>();
+		data.put("class", "二班");
+		data.put("name", "mandy");
+		data.put("age", "23");
+		data.put("sex", "女");
+		targetList.add(data);
+
+		Map<String, List<Map<String, Object>>> groupMap = groupList("class", targetList);
+		List<Map<String, Object>> dataList = groupMap.get("一班");
+		Assert.assertTrue(dataList.size() == 3);
+		for (Map<String, Object> map : dataList) {
+			Assert.assertTrue(map.get("class").toString().equals("一班"));
+		}
+
+		dataList = groupMap.get("二班");
+		Assert.assertTrue(dataList.size() == 4);
+		for (Map<String, Object> map : dataList) {
+			Assert.assertTrue(map.get("class").toString().equals("二班"));
+		}
+
 	}
 	
 }

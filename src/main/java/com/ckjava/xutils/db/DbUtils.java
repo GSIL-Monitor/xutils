@@ -127,9 +127,8 @@ public class DbUtils extends StringUtils {
 		}
 	}
 	
-	public static void executeMutiSql(Connection conn, String sql, int transactionLevel) {
-		int rowcount = 0;
-		PreparedStatement ps = null;
+	public static int executeMutiSql(Connection conn, String sql, int transactionLevel) {
+		int sum = 0;
 		try {
 			conn.setAutoCommit(false);
 			conn.setTransactionIsolation(transactionLevel);
@@ -140,12 +139,14 @@ public class DbUtils extends StringUtils {
 					.replaceAll(";(\\s*|\t|\r|\n)(?i)create", "';'create");
 			String[] sqls = tempSql.split("\';\'");
 			for (String sqlstr : sqls) {
-				ps = conn.prepareStatement(sqlstr);
-				rowcount = ps.executeUpdate();
+				PreparedStatement ps = conn.prepareStatement(sqlstr);
+				int rowcount = ps.executeUpdate();
+				sum += rowcount;
 				logger.info("执行sql：{},受影响行数：{}", new Object[]{sqlstr, rowcount});
 			}
 			conn.commit();
 			conn.setAutoCommit(true);
+
 		} catch (SQLException e) {
 			logger.error("执行sql出现异常", e);
 			try {
@@ -153,9 +154,10 @@ public class DbUtils extends StringUtils {
 			} catch (SQLException e1) {
 				logger.error("回滚出现异常", e1);
 			}
-			rowcount = 0;
+			sum = 0;
 		} finally {
-			closeResource(conn, ps, null);
+			closeResource(conn, null, null);
+			return sum;
 		}
 	}
 	

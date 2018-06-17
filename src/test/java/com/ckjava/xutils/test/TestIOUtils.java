@@ -26,10 +26,6 @@ public class TestIOUtils extends IOUtils implements Constants {
 		Assert.assertTrue(content.equals(getString(new FileInputStream(file), CHARSET.GB2312)));
 		
 		Assert.assertTrue(file.delete() == true);
-		
-		Assert.assertTrue(getString(null) == null);
-		Assert.assertTrue(getString(null, CHARSET.GB2312) == null);
-		Assert.assertTrue(getString(null, null) == null);
 	}
 
 }
