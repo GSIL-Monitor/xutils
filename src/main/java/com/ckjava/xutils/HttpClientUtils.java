@@ -1,5 +1,6 @@
 package com.ckjava.xutils;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,6 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -40,6 +42,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
     private static Logger log = LoggerFactory.getLogger(HttpClientUtils.class);
 
     private static int timeout = 100000;
+    private static String charset = CHARSET.UTF8;
 
     /**
      * put 请求, body 是 xml 字符串 或者 json 字符串
@@ -175,7 +178,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
     private static String appendRequestHeader(Map<String, String> headers, AbstractHttpMessage httpMessage) {
         String contentType = null;
         if (headers != null && !headers.isEmpty()) {
-            for (Iterator<Entry<String, String>> it = headers.entrySet().iterator(); it.hasNext(); ) {
+            for (Iterator<Entry<String, String>> it = headers.entrySet().iterator(); it.hasNext();) {
                 Entry<String, String> data = it.next();
                 String key = data.getKey();
                 String value = data.getValue();
@@ -223,9 +226,31 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
         log.info("get response from http server..");
         HttpEntity entity = response.getEntity();
 
+        String contentType = "";
+        Header[] headers = response.getAllHeaders();
+        for (int i = 0, c = ArrayUtils.getSize(headers); i < c; i++) {
+            Header header = ArrayUtils.getValue(headers, i);
+            String headerName = header.getName();
+            if (headerName.equalsIgnoreCase("Content-Type")) {
+                contentType = "application/octet-stream";
+            }
+        }
+
+        Header contentEncodingHeader = entity.getContentEncoding();
+        if (contentType.equalsIgnoreCase("application/octet-stream")
+                && (contentEncodingHeader == null || StringUtils.isBlank(contentEncodingHeader.getValue()))) {
+            Locale locale = response.getLocale();
+            if (locale.getLanguage().equals("zh")) {
+                charset = CHARSET.GB2312;
+            }
+        } else {
+            charset = contentEncodingHeader.getValue();
+        }
+
+
         log.info("response status: " + response.getStatusLine());
         try {
-            return EntityUtils.toString(entity);
+            return EntityUtils.toString(entity, charset);
         } catch (Exception e) {
             log.error("paseResponse has error", e);
             return null;
@@ -253,7 +278,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      */
     private static void addJSONBody(HttpEntityEnclosingRequestBase http, String bodyString) {
         try {
-            StringEntity se = new StringEntity(bodyString, ContentType.create(MIMETYPE.APPLICATION_JSON, CHARSET.UTF8));
+            StringEntity se = new StringEntity(bodyString, ContentType.create(MIMETYPE.APPLICATION_JSON, charset));
             http.setEntity(se);
         } catch (Exception e) {
             log.error("addJSONBody has Exception", e);
@@ -269,7 +294,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      */
     private static void addXmlBody(HttpEntityEnclosingRequestBase http, Object obj) {
         try {
-            StringEntity se = new StringEntity(StringUtils.getStr(obj), ContentType.create(MIMETYPE.TEXT_XML, CHARSET.UTF8));
+            StringEntity se = new StringEntity(StringUtils.getStr(obj), ContentType.create(MIMETYPE.TEXT_XML, charset));
             http.setEntity(se);
         } catch (Exception e) {
             log.error("addXmlBody has Exception", e);
