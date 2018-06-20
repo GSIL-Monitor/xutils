@@ -226,6 +226,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
         log.info("get response from http server..");
         HttpEntity entity = response.getEntity();
 
+        // 获取 contentType
         String contentType = "";
         Header[] headers = response.getAllHeaders();
         for (int i = 0, c = ArrayUtils.getSize(headers); i < c; i++) {
@@ -236,17 +237,17 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
             }
         }
 
-        Header contentEncodingHeader = entity.getContentEncoding();
-        if (contentType.equalsIgnoreCase("application/octet-stream")
-                && (contentEncodingHeader == null || StringUtils.isBlank(contentEncodingHeader.getValue()))) {
-            Locale locale = response.getLocale();
-            if (locale.getLanguage().equals("zh")) {
-                charset = CHARSET.GB2312;
+        if (contentType.equalsIgnoreCase("application/octet-stream")) {
+            Header contentEncodingHeader = entity.getContentEncoding();
+            if (contentEncodingHeader == null || StringUtils.isBlank(contentEncodingHeader.getValue())) {
+                Locale locale = response.getLocale();
+                if (locale != null && locale.getLanguage().equals("zh")) {
+                    charset = CHARSET.GB2312;
+                }
+            } else {
+                charset = contentEncodingHeader.getValue();
             }
-        } else {
-            charset = contentEncodingHeader.getValue();
         }
-
 
         log.info("response status: " + response.getStatusLine());
         try {
