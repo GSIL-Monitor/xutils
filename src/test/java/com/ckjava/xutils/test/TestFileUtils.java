@@ -15,14 +15,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import com.ckjava.xutils.ArrayUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.ckjava.xutils.FileUtils;
 import com.ckjava.xutils.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestFileUtils extends FileUtils {
+
+	private static Logger logger = LoggerFactory.getLogger(TestFileUtils.class);
 	
 	String path = null;
 	
@@ -160,35 +165,44 @@ public class TestFileUtils extends FileUtils {
 		String path = "D:\\git-workspace\\xutils";
 		String desDir = "D:/BaiduYunDownload/encode-files";
 		//backupDir(path, desDir, excludePath, excludeFile);
+
+		String originalFileName = "ui-auto-web_zip_encode_1531737883885.zip";
+
+		String zipFile = "D:\\BaiduYunDownload\\"+originalFileName;
+		String unzipPath = "D:\\workspace\\git-workspace\\";
 		
-		String originalFileName = "stockPrediction_zip_encode_1526382296764.zip";
-		String encodeFileName = "stockPrediction_zip_encode_1526382296764";
-		String zipFileName = "stockPrediction.zip";
-		String projectFileName = "stockPrediction";
-		
-		String zipFile = "D:\\workspace\\neuroph\\"+originalFileName;
-		String unzipPath = "D:\\workspace\\neuroph\\";
-		
-		unpackFile(new File(zipFile), new File(unzipPath), encodeFileName, zipFileName, projectFileName);
+		unpackFile(new File(zipFile), new File(unzipPath));
 	}
 	
-	public static void unpackFile(File zipfile, File dirPath, String encodefileName, String zipFileName, String projectFileName) {
+	public static void unpackFile(File zipfile, File dirPath) {
+		String originalFileName = zipfile.getName();
+		String[] originalFileNames = originalFileName.split("\\.");
+		String encodefileName = ArrayUtils.getValue(originalFileNames, 0);
+
+		String[] fileNames = encodefileName.split("_");
+		String projectFileName = ArrayUtils.getValue(fileNames, 0);
+		String zipFileName = projectFileName + ".zip";
+
 		boolean flag = unzipFile(zipfile, dirPath);
 		if (flag) {
-			System.out.println("解压原始文件成功");
-			
+			logger.info("解压原始文件 {} 成功", zipfile.getAbsolutePath());
+
+			File destEncodeFile = new File(dirPath.getAbsolutePath()+File.separator+encodefileName);
 			File destZipFile = new File(dirPath.getAbsolutePath()+File.separator+zipFileName);
-			deCodeFile(new File(dirPath.getAbsolutePath()+File.separator+encodefileName), destZipFile);
-			System.out.println("deCodeFile done");
-			
-			flag = unzipFile(destZipFile, new File(dirPath.getAbsolutePath()+File.separator+projectFileName));
+			deCodeFile(destEncodeFile, destZipFile);
+			logger.info("解密文件 {} 完成", destEncodeFile.getAbsolutePath());
+
+			File projectFile = new File(dirPath.getAbsolutePath()+File.separator+projectFileName);
+			flag = unzipFile(destZipFile, projectFile);
 			if (flag) {
-				System.out.println("解压项目文件成功");
+				logger.info("解压项目文件 {} 成功", destZipFile.getAbsolutePath());
+				logger.info("删除临时文件 {} {}", destEncodeFile.getAbsolutePath(), (destEncodeFile.delete() ? STATUS.SUCCESS : STATUS.FAIL));
+				logger.info("删除临时文件 {} {}", destZipFile.getAbsolutePath(), (destZipFile.delete() ? STATUS.SUCCESS : STATUS.FAIL));
 			} else {
-				System.out.println("解压项目文件成功");
+				logger.error("解压项目文件 {} 失败", destZipFile.getAbsolutePath());
 			}
 		} else {
-			System.err.println("解压原始文件失败");
+			logger.error("解压原始文件 {} 失败", zipfile.getAbsolutePath());
 		}
 		
 	}

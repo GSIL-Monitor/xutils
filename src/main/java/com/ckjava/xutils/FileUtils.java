@@ -486,14 +486,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils implements Consta
 	            BufferedOutputStream bos = null;
 	            ZipEntry entry = null;
 	            int b = 0;
+	            byte[] buffer = new byte[1024];
 	            while ((entry=zis.getNextEntry()) != null) {
 	            	String entryName = entry.getName();
 	            	File unzipFile = new File(dirPath.getAbsolutePath() + File.separator + entryName);
 	            	createFile(dirPath.getAbsolutePath() + File.separator + entryName);
 	            	
 	                bos = new BufferedOutputStream(new FileOutputStream(unzipFile));
-	                while ((b = zis.read()) != -1) {
-	                	bos.write(b);
+	                while ((b = zis.read(buffer)) != -1) {
+	                	bos.write(buffer, 0, b);
 	                }
 	                bos.flush();
 	                bos.close();
