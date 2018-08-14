@@ -1,5 +1,6 @@
 package com.ckjava.xutils;
 
+import com.ckjava.xutils.http.HttpResult;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,6 +29,7 @@ import javax.net.ssl.SSLContext;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +41,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class HttpClientUtils extends EncodesUtils implements Constants {
-    private static Logger log = LoggerFactory.getLogger(HttpClientUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
     private static int timeout = 100000;
     private static String charset = CHARSET.UTF8;
@@ -51,28 +53,28 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      * @param headers    请求头
      * @param parameters 请求参数
      * @param bodyString Object 请求体
-     * @return String 返回内容
+     * @return HttpResult 返回内容
      */
-    public static String put(String url, Map<String, String> headers, Map<String, String> parameters, String bodyString) {
+    public static HttpResult put(String url, Map<String, String> headers, Map<String, String> parameters, String bodyString) {
         CloseableHttpClient httpclient = initWeakSSLClient();
+        logger.info("create http put:" + url);
         try {
-            log.info("create http put:" + url);
-            // 添加请求参数
+            // 将请求参数追加到url后面
             url = appendRequestParameter(url, parameters);
-            HttpPut httpPut = new HttpPut(url);
-            // 添加请求头
-            String contentType = appendRequestHeader(headers, httpPut);
-            // 设置请求体
-            addRequestBody(bodyString, httpPut, contentType);
-
-            return invoke(httpclient, httpPut);
         } catch (Exception e) {
-            log.error("http put has error", e);
-            return null;
+            logger.error("put appendRequestParameter has error", e);
+            HttpResult.getException(e);
+        }
+        HttpPut httpPut = new HttpPut(url);
+        // 添加请求头
+        String contentType = appendRequestHeader(headers, httpPut);
+        // 设置请求体
+        addRequestBody(bodyString, httpPut, contentType);
+        try {
+            return invoke(httpclient, httpPut);
         } finally {
             IOUtils.closeQuietly(httpclient);
         }
-
     }
 
     /**
@@ -82,25 +84,25 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      * @param headers    请求头
      * @param parameters 请求参数
      * @param bodyString 请求体
-     * @return String 返回内容
+     * @return HttpResult 返回内容
      */
-    public static String post(String url, Map<String, String> headers, Map<String, String> parameters, String bodyString) {
+    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> parameters, String bodyString) {
         CloseableHttpClient httpclient = initWeakSSLClient();
+        logger.info("create http post:" + url);
         try {
-            log.info("create http post:" + url);
-            // 添加请求参数
+            // 将请求参数追加到url后面
             url = appendRequestParameter(url, parameters);
-
-            HttpPost httpost = new HttpPost(url);
-            // 添加请求头
-            String contentType = appendRequestHeader(headers, httpost);
-            // 设置请求体
-            addRequestBody(bodyString, httpost, contentType);
-
-            return invoke(httpclient, httpost);
         } catch (Exception e) {
-            log.error("http post has error", e);
-            return null;
+            logger.error("post appendRequestParameter has error", e);
+            return HttpResult.getException(e);
+        }
+        HttpPost httpost = new HttpPost(url);
+        // 添加请求头
+        String contentType = appendRequestHeader(headers, httpost);
+        // 设置请求体
+        addRequestBody(bodyString, httpost, contentType);
+        try {
+            return invoke(httpclient, httpost);
         } finally {
             IOUtils.closeQuietly(httpclient);
         }
@@ -114,22 +116,21 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      * @param params  请求参数
      * @return 返回内容
      */
-    public static String get(String url, Map<String, String> headers, Map<String, String> params) {
+    public static HttpResult get(String url, Map<String, String> headers, Map<String, String> params) {
         CloseableHttpClient httpClient = initWeakSSLClient();
         try {
             // 将请求参数追加到url后面
             url = appendRequestParameter(url, params);
-
-            log.info("create http get:" + url);
-            HttpGet httpGet = new HttpGet(url);
-
-            // 添加请求头
-            appendRequestHeader(headers, httpGet);
-
-            return invoke(httpClient, httpGet);
         } catch (Exception e) {
-            log.error("http get has error", e);
-            return null;
+            logger.error("get appendRequestParameter has error", e);
+            return HttpResult.getException(e);
+        }
+        logger.info("create http get:" + url);
+        HttpGet httpGet = new HttpGet(url);
+        // 添加请求头
+        appendRequestHeader(headers, httpGet);
+        try {
+            return invoke(httpClient, httpGet);
         } finally {
             IOUtils.closeQuietly(httpClient);
         }
@@ -143,22 +144,21 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
      * @param params  请求参数
      * @return 返回内容
      */
-    public static String delete(String url, Map<String, String> headers, Map<String, String> params) {
+    public static HttpResult delete(String url, Map<String, String> headers, Map<String, String> params) {
         CloseableHttpClient httpClient = initWeakSSLClient();
         try {
             // 将请求参数追加到url后面
             url = appendRequestParameter(url, params);
-
-            log.info("create http delete:" + url);
-            HttpDelete httpDelete = new HttpDelete(url);
-
-            // 添加请求头
-            appendRequestHeader(headers, httpDelete);
-
-            return invoke(httpClient, httpDelete);
         } catch (Exception e) {
-            log.error("http delete has error", e);
-            return null;
+            logger.error("delete appendRequestParameter has error", e);
+            return HttpResult.getException(e);
+        }
+        logger.info("create http delete:" + url);
+        HttpDelete httpDelete = new HttpDelete(url);
+        // 添加请求头
+        appendRequestHeader(headers, httpDelete);
+        try {
+            return invoke(httpClient, httpDelete);
         } finally {
             IOUtils.closeQuietly(httpClient);
         }
@@ -217,55 +217,70 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
         return url;
     }
 
-    private static String invoke(CloseableHttpClient httpclient, HttpUriRequest httprequest) {
+    private static HttpResult invoke(CloseableHttpClient httpclient, HttpUriRequest httprequest) {
         HttpResponse response = sendRequest(httpclient, httprequest);
-        return paseResponse(response);
+        return parseResponse(response);
     }
 
-    private static String paseResponse(HttpResponse response) {
-        log.info("get response from http server..");
+    private static HttpResult parseResponse(HttpResponse response) {
+        logger.info("get response from http server...");
         HttpEntity entity = response.getEntity();
+        logger.info("response status {}", response.getStatusLine());
+        logger.info("response locale {}", response.getLocale().toString());
 
-        // 获取 contentType
-        String contentType = "";
+        // 获取header
         Header[] headers = response.getAllHeaders();
         for (int i = 0, c = ArrayUtils.getSize(headers); i < c; i++) {
             Header header = ArrayUtils.getValue(headers, i);
             String headerName = header.getName();
-            if (headerName.equalsIgnoreCase("Content-Type")) {
-                contentType = "application/octet-stream";
-            }
+            String headerValue = header.getValue();
+            logger.info("response header {}: {}", headerName, headerValue);
         }
 
-        if (contentType.equalsIgnoreCase("application/octet-stream")) {
+        // 获取 contentType
+        ContentType contentType = ContentType.get(entity);
+        Charset charsetObj = contentType.getCharset();
+        logger.info("get charset from ContentType is {}", charsetObj != null ? charsetObj.toString() : null);
+
+        // 根据 Locale 来设置 application/octet-stream 字节内容编码
+        if (contentType.getMimeType().equals(MIMETYPE.APPLICATION_OCTET_STREAM)) {
             Header contentEncodingHeader = entity.getContentEncoding();
+            charset = CHARSET.GB2312;
             if (contentEncodingHeader == null || StringUtils.isBlank(contentEncodingHeader.getValue())) {
                 Locale locale = response.getLocale();
                 if (locale != null && locale.getLanguage().equals("zh")) {
                     charset = CHARSET.GB2312;
                 }
             } else {
+                logger.info("contentEncodingHeader {}: {}", contentEncodingHeader.getName(), contentEncodingHeader.getValue());
                 charset = contentEncodingHeader.getValue();
             }
         }
 
-        log.info("response status: " + response.getStatusLine());
         try {
-            return EntityUtils.toString(entity, charset);
+            boolean isChunked = entity.isChunked();
+            logger.info("response entity isChunked {}", isChunked);
+            logger.info("parse BodyString use charset {}", charset);
+            String bodyString = EntityUtils.toString(entity, charset);
+
+            HttpResult result = new HttpResult();
+            result.setBodyString(bodyString);
+            result.setStatusCode(response.getStatusLine().getStatusCode());
+            return result;
         } catch (Exception e) {
-            log.error("paseResponse has error", e);
-            return null;
+            logger.error("parseResponse has error", e);
+            return HttpResult.getException(e);
         }
     }
 
     private static HttpResponse sendRequest(HttpClient httpclient, HttpUriRequest request) {
-        log.info("execute request...");
+        logger.info("execute request...");
         HttpResponse response = null;
 
         try {
             response = httpclient.execute(request);
         } catch (Exception e) {
-            log.error("sendRequest has error", e);
+            logger.error("sendRequest has error", e);
         }
 
         return response;
@@ -282,7 +297,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
             StringEntity se = new StringEntity(bodyString, ContentType.create(MIMETYPE.APPLICATION_JSON, charset));
             http.setEntity(se);
         } catch (Exception e) {
-            log.error("addJSONBody has Exception", e);
+            logger.error("addJSONBody has Exception", e);
         }
     }
 
@@ -298,7 +313,7 @@ public class HttpClientUtils extends EncodesUtils implements Constants {
             StringEntity se = new StringEntity(StringUtils.getStr(obj), ContentType.create(MIMETYPE.TEXT_XML, charset));
             http.setEntity(se);
         } catch (Exception e) {
-            log.error("addXmlBody has Exception", e);
+            logger.error("addXmlBody has Exception", e);
         }
     }
 
