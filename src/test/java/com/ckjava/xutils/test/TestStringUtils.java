@@ -47,6 +47,7 @@ public class TestStringUtils extends StringUtils {
 		String targetString = "SELECT * FROM data_user WHERE group_id = '1' AND del_flag = '0'";
 		Map<String, String> data = CollectionUtils.asHashMap(new String[] {"group_id", "del_flag"}, new String[] {"'1'", "'0'"});
 		assertTrue(replaceVariable(sourceString, data).equals(targetString));
+		assertTrue(replaceVariable("${group_id}", data).equals("'1'"));
 	}
 	
 	@Test

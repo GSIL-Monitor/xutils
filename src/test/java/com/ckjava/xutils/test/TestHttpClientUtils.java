@@ -35,7 +35,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 	}
 	
 	public static void testPostXml() {
-		String originalBody = null;
+		/*String originalBody = null;
 		try {
 			originalBody = IOUtils.getString(TestHttpClientUtils.class.getResourceAsStream("/xml.txt")); // 从classpath下获取文件
 		} catch (Exception e) {
@@ -45,11 +45,11 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		headers.put("Content-Type", "text/xml; charset=utf-8");
 		headers.put("SOAPAction", "http://tempuri.org/Request");
 		String resultStr = post("https://ws.cardint.payment.ctripcorp.com/CreditCardService/api/CreditCardService.asmx", headers, null, originalBody);
-		System.out.println(resultStr);
+		System.out.println(resultStr);*/
 	}
 	
 	public static void testPostJSON() {
-		String originalBody = null;
+		/*String originalBody = null;
 		try {
 			originalBody = IOUtils.getString(TestHttpClientUtils.class.getResourceAsStream("/json.txt")); // 从classpath下获取文件
 		} catch (Exception e) {
@@ -60,19 +60,19 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		headers.put("username", "chen_k");
 		headers.put("offlineTicket", "xquery");
 		String resultStr = post("http://localhost:8011/api/basic", headers, null, originalBody);
-		System.out.println(resultStr);
+		System.out.println(resultStr);*/
 	}
 	
 	public static void testDeleteApi() {
-		String datas = delete("http://localhost:9087/legends/api/job/4", CollectionUtils.asHashMap(new String[]{ "offlineTicket", "username" }, new String[]{ "uiauto", "chen_k" }), null);
-		System.out.println(datas);
+		/*String datas = delete("http://localhost:9087/legends/api/job/4", CollectionUtils.asHashMap(new String[]{ "offlineTicket", "username" }, new String[]{ "uiauto", "chen_k" }), null);
+		System.out.println(datas);*/
 	}
 
 	public static void testGetApi() {
-		String datas = get(
+		/*String datas = get(
 				"https://ws.proxy.router.payment.fat45.qa.nt.ctripcorp.com/payment-route-apiservice/cache/value/get?key=payment:merchant:product:new:indexfat45&type=2",
 				null, null);
-		System.out.println(datas);
+		System.out.println(datas);*/
 	}
 
 	public static void getClassPathFile() {
@@ -86,7 +86,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 	}
 
 	public static void testPostApi() {
-		String url = "http://ws.ebank.payment.fat18.qa.nt.ctripcorp.com/PaymentPasswordServiceAPI/GetUserPWDInfo";
+		/*String url = "http://ws.ebank.payment.fat18.qa.nt.ctripcorp.com/PaymentPasswordServiceAPI/GetUserPWDInfo";
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json;charset=utf-8");
 		Map<String, String> parameters = new HashMap<>();
@@ -94,11 +94,11 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		Map<String, String> body = new HashMap<>();
 		body.put("CustomerID", "M01230808");
 		String resultStr = post(url, headers, parameters, JSON.toJSONString(body));
-		System.out.println(resultStr);
+		System.out.println(resultStr);*/
 	}
 
 	public static void testPostApi2() {
-		String url = "http://ws.ebank.payment.fat18.qa.nt.ctripcorp.com/PaymentPasswordServiceAPI/GetUserPWDInfo";
+		/*String url = "http://ws.ebank.payment.fat18.qa.nt.ctripcorp.com/PaymentPasswordServiceAPI/GetUserPWDInfo";
 		Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json;charset=utf-8");
 		Map<String, String> parameters = new HashMap<>();
@@ -107,11 +107,11 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		String body = "{     \"CustomerID\":\"M01230808\" }";
 		Object obj = JSON.parse(body);
 		String resultStr = post(url, headers, parameters, JSON.toJSONString(obj));
-		System.out.println(resultStr);
+		System.out.println(resultStr);*/
 	}
 	
 	public static void testPostApi3() {
-		String url = "http://10.32.74.44:9087/legends/api/job";
+		/*String url = "http://10.32.74.44:9087/legends/api/job";
 
 		Map<String, Object> jobData = new HashMap<String, Object>();
 		jobData.put("id", "6");
@@ -127,7 +127,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 		jobData.put("param", "10");
 		
 		String resultStr = post(url, CollectionUtils.asHashMap(new String[]{ "offlineTicket", "username" }, new String[]{ "uiauto", "chen_k" }), null, JSON.toJSONString(jobData));
-		System.out.println(resultStr);
+		System.out.println(resultStr);*/
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 
 		@Override
 		public void run() {
-			String resultStr = post("http://10.3.6.98:8080/Dare/api/datareplay/originaldata/save", null, null, JSON.toJSONString(data));
+			/*String resultStr = post("http://10.3.6.98:8080/Dare/api/datareplay/originaldata/save", null, null, JSON.toJSONString(data));
 			JSONObject jsonobj = JSON.parseObject(resultStr);
 			if (jsonobj.getString("code").equals("200")) {
 				success.getAndAdd(1);
@@ -199,14 +199,14 @@ public class TestHttpClientUtils extends HttpClientUtils {
 			} else {
 				fail.getAndAdd(1);
 				System.out.println("fail");
-			}
+			}*/
 		}
 
 	}
 
 	//@Test
 	public void testContentType() {
-		try {
+		/*try {
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("Content-Type", "application/x-www-form-urlencoded");
 
@@ -221,7 +221,7 @@ public class TestHttpClientUtils extends HttpClientUtils {
 			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	//@Test

@@ -157,12 +157,22 @@ public class TestFileUtils extends FileUtils {
 	}
 	
 	public static void main(String[] args) {
-		String[] excludePath = {".svn", ".git", ".metadata",".recommenders", "target", "bin", ".settings", "classes", "logs"};
+		// 备份
+		// ".svn", ".git",
+		/*String[] excludePath = { ".metadata", ".recommenders", "target", "bin", ".settings", "classes", "logs"};
 		String[] excludeFile = {".class"};
-		//String path = "D:/git-workspace/db_backup";
-		//String path = "D:/php-workspace";
-		//String path = "D:/svn-workspace";
-		String path = "D:\\git-workspace\\xutils";
+
+		String db_backup = "D:/git-workspace/db_backup";
+		String phpWorkspace = "D:/php-workspace";
+		String svnWorkspace = "D:/svn-workspace";
+		String xutils = "D:/svn-workspace/xutils";
+		String cdagger = "D:/svn-workspace/cdagger";
+		String uiautoweb = "D:/svn-workspace/ui-auto-web";
+		String stockPrediction = "D:\\git-workspace\\stockPrediction";
+		String jRecordLog = "D:\\git-workspace\\jRecordLog";
+
+		String[] paths = { xutils, jRecordLog };
+
 		String desDir = "D:/BaiduYunDownload/encode-files";
 		//backupDir(path, desDir, excludePath, excludeFile);
 
@@ -170,7 +180,7 @@ public class TestFileUtils extends FileUtils {
 
 		String zipFile = "D:\\BaiduYunDownload\\"+originalFileName;
 		String unzipPath = "D:\\workspace\\git-workspace\\";
-		
+
 		unpackFile(new File(zipFile), new File(unzipPath));
 	}
 	
@@ -207,40 +217,41 @@ public class TestFileUtils extends FileUtils {
 		
 	}
 	
-	public static void backupDir(String path, String desDir, String[] excludePath, String[] excludeFile) {
-		File zipFile = new File(path + ".zip");
-		File encodeFile = new File(path + "_zip_encode_" + new Date().getTime());
-		
-		FileUtils.zipFiles(path, "*", excludePath, excludeFile, zipFile);
-		
-		enCodeFile(zipFile, encodeFile);
-		
-		File finalZipFile = FileUtils.zipFile(encodeFile);
-		
-		try {
-			File desFile = new File(desDir + File.separator + finalZipFile.getName());
-			if (desFile.exists()) {
-				desFile.delete();
+	public static void backupDir(String[] paths, String desDir, String[] excludePath, String[] excludeFile) {
+		for (String path : paths) {
+			File zipFile = new File(path + ".zip");
+			File encodeFile = new File(path + "_zip_encode_" + new Date().getTime());
+
+			FileUtils.zipFiles(path, "*", excludePath, excludeFile, zipFile);
+
+			enCodeFile(zipFile, encodeFile);
+
+			File finalZipFile = FileUtils.zipFile(encodeFile);
+
+			try {
+				File desFile = new File(desDir + File.separator + finalZipFile.getName());
+				if (desFile.exists()) {
+					desFile.delete();
+				}
+				FileUtils.moveFileToDirectory(finalZipFile, new File(desDir), true);
+
+				if (zipFile.delete()) {
+					System.out.println("delete " + zipFile);
+				}
+
+				if (encodeFile.delete()) {
+					System.out.println("delete " + encodeFile);
+				}
+
+				if (finalZipFile.delete()) {
+					System.out.println("delete " + finalZipFile.getAbsolutePath());
+				}
+
+				System.out.println("finish");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			FileUtils.moveFileToDirectory(finalZipFile, new File(desDir), true);
-			
-			if (zipFile.delete()) {
-				System.out.println("delete " + zipFile);
-			}
-			
-			if (encodeFile.delete()) {
-				System.out.println("delete " + encodeFile);
-			}
-			
-			if (finalZipFile.delete()) {
-				System.out.println("delete " + finalZipFile.getAbsolutePath());
-			}
-			
-			System.out.println("finish");
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		
 	}
 	
 	public static void deCodeFile() {
