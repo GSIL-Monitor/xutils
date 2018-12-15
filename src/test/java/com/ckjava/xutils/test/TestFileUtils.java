@@ -159,7 +159,7 @@ public class TestFileUtils extends FileUtils {
 	public static void main(String[] args) {
 		// 备份
 		// ".svn", ".git",
-		/*String[] excludePath = { ".metadata", ".recommenders", "target", "bin", ".settings", "classes", "logs"};
+		String[] excludePath = { ".metadata", ".recommenders", "target", "bin", ".settings", "classes", "logs"};
 		String[] excludeFile = {".class"};
 
 		String db_backup = "D:/git-workspace/db_backup";
