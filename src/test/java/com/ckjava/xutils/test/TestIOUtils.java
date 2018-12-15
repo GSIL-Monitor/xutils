@@ -17,10 +17,10 @@ public class TestIOUtils extends IOUtils implements Constants {
 	public void getString() throws FileNotFoundException {
 		long time = System.currentTimeMillis();
 		String fileName = time+".txt";
-		String content = "sdfslz中文";
+		String content = "zhongwen 中文";
 		File file = new File(fileName);
 		FileUtils.writeStringToFile(file, content, true, CHARSET.UTF8);
-		Assert.assertTrue(content.equals(getString(new FileInputStream(file))));
+		Assert.assertTrue(content.equals(getString(new FileInputStream(file), CHARSET.UTF8)));
 		
 		FileUtils.writeStringToFile(file, content, false, CHARSET.GB2312);
 		Assert.assertTrue(content.equals(getString(new FileInputStream(file), CHARSET.GB2312)));

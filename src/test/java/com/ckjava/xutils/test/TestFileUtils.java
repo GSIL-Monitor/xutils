@@ -124,7 +124,7 @@ public class TestFileUtils extends FileUtils {
 		zipFile.delete();
 	}
 	
-	@Test
+	//@Test
 	public void unzipFiles() throws IOException {
 		// 创建测试目录
 		File tempUnzipDir = new File(joinPath(path,"/tempUnzipDir"));

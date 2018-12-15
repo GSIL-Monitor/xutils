@@ -15,18 +15,10 @@ import com.ckjava.xutils.EncodesUtils;
 
 public class TestEncodesUtils extends EncodesUtils implements Constants {
 
-	private String str = null;
-	private String base64Str = null;
-	private String hexStr = null;
-	private String urlEncodeString = null;
-	
-	@Before
-	public void initTest() {
-		str = "hello 你好";
-		base64Str = "aGVsbG8g5L2g5aW9";
-		hexStr = "68656c6c6f20e4bda0e5a5bd";
-		urlEncodeString = "hello+%E4%BD%A0%E5%A5%BD";
-	}
+	private String str = "hello 你好";
+	private String base64Str = "aGVsbG8g5L2g5aW9";
+	private String hexStr = "68656c6c6f20e4bda0e5a5bd";
+	private String urlEncodeString = "hello+%E4%BD%A0%E5%A5%BD";
 	
 	@Test
 	public void encodeHex() throws UnsupportedEncodingException {
@@ -57,7 +49,7 @@ public class TestEncodesUtils extends EncodesUtils implements Constants {
 	public void decodeBase64() {
 		try {
 			byte[] tempByte = decodeBase64(base64Str);
-			assertTrue(new String(tempByte).equals(str));
+			assertTrue(new String(tempByte, CHARSET.UTF8).equals(str));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
